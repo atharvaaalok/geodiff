@@ -6,8 +6,8 @@ Differentiable geometry representations for shape parameterization and optimizat
 - [x] Create first cut User Docs using Jupyter Books and MyST markdown.
     - [x] What is this package for?
     - [x] Add .gitignore for MyST markdown.
-- [ ] Launch Github Discussions for the project.
-    - [ ] Create introductory dicussion post.
+- [x] Launch Github Discussions for the project.
+    - [x] Create introductory dicussion post.
 - [ ] Add MIT License.
 - [ ] Update pyproject.toml.
     - [ ] Maintainers, license, license-file, keywords, classifiers, project urls.

@@ -1,0 +1,24 @@
+version: 1
+
+
+project:
+  title: GeoDiff
+  description: Differentiable geometry representations for shape parameterization and optimization.
+  date: 2025-09-12
+  jupyter: true
+  github: https://github.com/atharvaaalok/geodiff
+  authors:
+  - name: Atharva Aalok
+    email: atharvaaalok@gmail.com
+    corresponding: true
+    affiliations: Stanford University
+    url: https://atharvaaalok.com/
+    twitter: atharvaaalok
+    github: atharvaaalok
+  toc:
+  - file: geodiff.md
+
+
+site:
+  template: book-theme
+  title: GeoDiff

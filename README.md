@@ -1,0 +1,1 @@
+Differentiable geometry representations for shape parameterization and optimization.

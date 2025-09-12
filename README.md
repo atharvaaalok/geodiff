@@ -2,7 +2,7 @@ Differentiable geometry representations for shape parameterization and optimizat
 
 
 ## Project Plan
-- [ ] Add Github Actions workflow for Github Pages.
+- [x] Add Github Actions workflow for Github Pages.
 - [ ] Create first cut User Docs using Jupyter Books and MyST markdown.
     - [ ] What is this package for?
     - [ ] Add .gitignore for MyST markdown.

@@ -9,8 +9,8 @@ Differentiable geometry representations for shape parameterization and optimizat
 - [x] Launch Github Discussions for the project.
     - [x] Create introductory dicussion post.
 - [x] Add MIT License.
-- [ ] Update pyproject.toml.
-    - [ ] Maintainers, license, license-file, keywords, classifiers, project urls.
+- [x] Update pyproject.toml.
+    - [x] Maintainers, license, license-file, keywords, classifiers, project urls.
 - [ ] Add Github Actions workflow for Github Release and PyPI publishing.
 - [ ] Add CHANGELOG.md to maintain release details.
 - [ ] Create first tag and push it to initiate first release and publish.

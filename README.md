@@ -1,1 +1,16 @@
 Differentiable geometry representations for shape parameterization and optimization.
+
+
+## Project Plan
+- [ ] Add Github Actions workflow for Github Pages.
+- [ ] Create first cut User Docs using Jupyter Books and MyST markdown.
+    - [ ] What is this package for?
+    - [ ] Add .gitignore for MyST markdown.
+- [ ] Launch Github Discussions for the project.
+    - [ ] Create introductory dicussion post.
+- [ ] Add MIT License.
+- [ ] Update pyproject.toml.
+    - [ ] Maintainers, license, license-file, keywords, classifiers, project urls.
+- [ ] Add Github Actions workflow for Github Release and PyPI publishing.
+- [ ] Add CHANGELOG.md to maintain release details.
+- [ ] Create first tag and push it to initiate first release and publish.

@@ -1,0 +1,99 @@
+# GitHub Actions workflow to build, release, and publish a Python package on new version tags
+name: Github Release and PyPI Publish
+
+
+on:
+  push:
+    tags:
+      # Use Python versioning format for stable releases
+      - "[0-9]+.[0-9]+.[0-9]+"
+
+
+# Set default permissions for all jobs that do not override them
+permissions:
+  contents: read
+
+
+jobs:
+
+  build:
+    name: Build package distributions
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo at tagged commit
+        uses: actions/checkout@v5
+
+      - name: Install the latest version of uv
+        uses: astral-sh/setup-uv@v6
+
+      - name: Build package with uv
+        # Default uv build location is ./dist
+        run: uv build
+
+      - name: Upload distribution files to be used in Release and Publish
+        uses: actions/upload-artifact@v4
+        with:
+          name: dists
+          path: dist/
+
+
+  release:
+    name: Create GitHub release for the tag
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repo to read from CHANGELOG.md
+        uses: actions/checkout@v5
+
+      - name: Download artifacts from the build job
+        uses: actions/download-artifact@v5
+        with:
+          name: dists
+          path: dist/
+
+      - name: Extract the CHANGELOG.md section for the current tag
+        run: |
+          TAG='${{ github.ref_name }}'
+          # Extract only current tag changelog section and copy to release notes
+          awk -v ver="$TAG" '
+            # Start at "## <version>"
+            $0 ~ "^##[[:space:]]" ver "([[:space:]]|$)" {flag = 1; next}
+            # Stop at the next "## " heading
+            /^##[[:space:]]/ && flag {flag = 0}
+            # Print lines while inside the section
+            flag
+          ' CHANGELOG.md > RELEASE_NOTES.md
+
+      - name: Create Github release for the tag and attach built files
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: ${{ github.ref_name }}
+          body_path: RELEASE_NOTES.md
+          files: |
+            dist/*.whl
+            dist/*.tar.gz
+
+
+  publish:
+    name: Publish package to PyPI
+    needs: release
+    runs-on: ubuntu-latest
+    permissions:
+      # Write permission required for PyPI Trusted Publishing (OIDC)
+      id-token: write
+    steps:
+      - name: Download artifacts from the build job
+        uses: actions/download-artifact@v5
+        with:
+          name: dists
+          path: dist/
+
+      - name: Install the latest version of uv
+        uses: astral-sh/setup-uv@v6
+
+      - name: Publish to PyPI with uv
+        # Upload to PyPI via OIDC (no token needed once Trusted Publisher is configured)
+        run: uv publish

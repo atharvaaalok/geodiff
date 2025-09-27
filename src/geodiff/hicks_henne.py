@@ -127,3 +127,37 @@ class HicksHenne(nn.Module):
                               dim = 1)
 
         return X_upper, X_lower
+
+
+    def visualize(self, ax = None):
+        if ax is None:
+            fig, ax = plt.subplots()
+        else:
+            fig = ax.figure
+
+        # Move to CPU for matplotlib
+        X_upper_baseline = self.X_upper_baseline.detach().cpu()
+        X_lower_baseline = self.X_lower_baseline.detach().cpu()
+        X_upper, X_lower = self.forward()
+        X_upper, X_lower = X_upper.detach().cpu(), X_lower.detach().cpu()
+
+        # Plot the baseline shape
+        ax.plot(X_upper_baseline[:, 0], X_upper_baseline[:, 1], linestyle = '--', linewidth = 2,
+                color = 'black', alpha = 0.7, label = 'upper (baseline)')
+        print(X_upper_baseline[:, 0])
+        ax.plot(X_lower_baseline[:, 0], X_lower_baseline[:, 1], linestyle = '--', linewidth = 2,
+                color = 'black', alpha = 0.7, label = 'lower (baseline)')
+
+        # Plot the shape
+        ax.plot(X_upper[:, 0], X_upper[:, 1], linestyle = '-', linewidth = 2,
+                color = 'orange', alpha = 0.7, label = 'upper')
+        ax.plot(X_lower[:, 0], X_lower[:, 1], linestyle = '-', linewidth = 2,
+                color = 'orange', alpha = 0.7, label = 'lower')
+
+        ax.set_xlabel('x')
+        ax.set_ylabel('y')
+        ax.set_aspect('equal')
+        ax.set_title('Hicks-Henne Bump Function Parameterization')
+        ax.legend(loc = 'upper center', bbox_to_anchor = (0.5, -0.05), ncol = 2)
+
+        return fig, ax

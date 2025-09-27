@@ -24,7 +24,7 @@ Differentiable geometry representations for shape parameterization and optimizat
 - [ ] Hicks-Henne bump functions.
     - [x] Implement the Hicks-Henne class.
     - [x] Add visualization method.
-    - [ ] Add type hints and docstrings.
+    - [x] Add type hints and docstrings.
     - [x] Add test script.
     - [ ] Add documentation.
     - [ ] Merge with main branch.

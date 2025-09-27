@@ -264,6 +264,6 @@ class HicksHenne(nn.Module):
         ax.set_ylabel('y')
         ax.set_aspect('equal')
         ax.set_title('Hicks-Henne Bump Function Parameterization')
-        ax.legend(loc = 'upper center', bbox_to_anchor = (0.5, -0.05), ncol = 2)
+        ax.legend(loc = 'upper center', bbox_to_anchor = (0.5, -0.12), ncol = 2)
 
         return fig, ax

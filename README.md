@@ -2,6 +2,7 @@ Differentiable geometry representations for shape parameterization and optimizat
 
 
 ## Project Plan
+### Stage 1: Initial Setup
 - [x] Add Github Actions workflow for Github Pages.
 - [x] Create first cut User Docs using Jupyter Books and MyST markdown.
     - [x] What is this package for?
@@ -14,3 +15,17 @@ Differentiable geometry representations for shape parameterization and optimizat
 - [x] Add Github Actions workflow for Github Release and PyPI publishing.
 - [x] Add CHANGELOG.md to maintain release details.
 - [x] Create first tag and push it to initiate first release and publish.
+
+### Stage 2: Implement Geometry Representations
+- [ ] Install necessary dependencies
+    - [ ] numpy, matplotlib and pytorch.
+- [ ] Implement loss functions.
+    - [ ] Start with Chamfer loss.
+- [ ] Hicks-Henne bump functions.
+    - [ ] Implement the Hicks-Henne class.
+    - [ ] Add visualization method.
+    - [ ] Add type hints and docstrings.
+    - [ ] Add test script.
+    - [ ] Add documentation.
+    - [ ] Merge with main branch.
+    - [ ] Create a tag and push it to create a release.

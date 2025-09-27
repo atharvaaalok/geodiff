@@ -19,8 +19,8 @@ Differentiable geometry representations for shape parameterization and optimizat
 ### Stage 2: Implement Geometry Representations
 - [ ] Install necessary dependencies
     - [ ] numpy, matplotlib and pytorch.
-- [ ] Implement loss functions.
-    - [ ] Start with Chamfer loss.
+- [x] Implement loss functions.
+    - [x] Start with Chamfer loss.
 - [ ] Hicks-Henne bump functions.
     - [ ] Implement the Hicks-Henne class.
     - [ ] Add visualization method.

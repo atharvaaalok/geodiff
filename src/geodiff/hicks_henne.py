@@ -144,7 +144,6 @@ class HicksHenne(nn.Module):
         # Plot the baseline shape
         ax.plot(X_upper_baseline[:, 0], X_upper_baseline[:, 1], linestyle = '--', linewidth = 2,
                 color = 'black', alpha = 0.7, label = 'upper (baseline)')
-        print(X_upper_baseline[:, 0])
         ax.plot(X_lower_baseline[:, 0], X_lower_baseline[:, 1], linestyle = '--', linewidth = 2,
                 color = 'black', alpha = 0.7, label = 'lower (baseline)')
 

@@ -12,7 +12,11 @@ maintainers = [
 license = "MIT"
 license-files = ["LICENSE"]
 requires-python = ">=3.12.0"
-dependencies = []
+dependencies = [
+    "matplotlib>=3.10.6",
+    "numpy>=2.3.3",
+    "torch>=2.8.0",
+]
 keywords = [
     "differentiable-geometry", "shape-optimization", "PyTorch", "machine-learning", "deep-learning",
     "geometric-deep-learning", "CFD", "design-optimization"

@@ -17,6 +17,7 @@ project:
     github: atharvaaalok
   toc:
   - file: geodiff.md
+  - file: hicks_henne.ipynb
 
 
 site:

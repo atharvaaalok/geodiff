@@ -22,7 +22,7 @@ Differentiable geometry representations for shape parameterization and optimizat
 - [x] Implement loss functions.
     - [x] Start with Chamfer loss.
 - [ ] Hicks-Henne bump functions.
-    - [ ] Implement the Hicks-Henne class.
+    - [x] Implement the Hicks-Henne class.
     - [ ] Add visualization method.
     - [ ] Add type hints and docstrings.
     - [ ] Add test script.

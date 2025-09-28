@@ -21,11 +21,11 @@ Differentiable geometry representations for shape parameterization and optimizat
     - [x] numpy, matplotlib and pytorch.
 - [x] Implement loss functions.
     - [x] Start with Chamfer loss.
-- [ ] Hicks-Henne bump functions.
+- [x] Hicks-Henne bump functions.
     - [x] Implement the Hicks-Henne class.
     - [x] Add visualization method.
     - [x] Add type hints and docstrings.
     - [x] Add test script.
     - [x] Add documentation.
     - [x] Merge with main branch.
-    - [ ] Create a tag and push it to create a release.
+    - [x] Create a tag and push it to create a release.

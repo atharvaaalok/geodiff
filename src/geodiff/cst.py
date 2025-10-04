@@ -6,6 +6,19 @@ from torch import nn
 
 
 def _bernstein_basis(x: torch.Tensor, n: int) -> torch.Tensor:
+    r"""Compute the Bernstein basis functions of degree :math:`n`.
+
+    For each x value in `x`, k value in :math:`k = 0, \dots, n`, the Bernstein polynomial is:
+    .. math::
+        B_{k, n}(x) \;=\; \binom{n}{k}\, x^{k}\, \left(1 - x \right)^{n-k}.
+
+    Args:
+        x: x-coordinates of points to evaluate basis functions at. Shape :math:`(N,)`.
+        n: Non-negative integer degree of the Bernstein polynomials. Produces :math:`n{+}1` columns.
+
+    Returns:
+        torch.Tensor: Basis matrix. Shape (N, K). Rows = x-samples, Cols = k-values.
+    """
     dtype, device = x.dtype, x.device
 
     # Compute all binomial coefficients (n choose k) and exponents
@@ -28,10 +41,56 @@ def _bernstein_basis(x: torch.Tensor, n: int) -> torch.Tensor:
 
 
 def _class_function(x: torch.Tensor, n1: float, n2: float) -> torch.Tensor:
+    r"""Evaluate the CST *class* function :math:`C(x) = x^{n_1}(1-x)^{n_2}`.
+
+    Args:
+        x: x-coordinates of points to evaluate class function at. Shape :math:`(N,)`.
+        n1: Class function exponent :math:`n_1`.
+        n2: Class function exponent :math:`n_2`.
+
+    Returns:
+        torch.Tensor: :math:`C(x)` with the same shape and dtype as `x`.
+    """
     return torch.pow(x, n1) * torch.pow(1 - x, n2)
 
 
 class CST(nn.Module):
+    r"""Class-Shape Transformation (CST) representation as described in [1]_.
+
+    This module implements the CST representation as described in [1]_. The upper and lower surfaces
+    of the shape are defined by:
+    .. math::
+        y_u(x) &= C(x)\,S_u(x) + \tau_u, \\
+        y_l(x) &= C(x)\,S_l(x) + \tau_l,
+
+    with shape functions
+    .. math::
+        S_u(x) &= \sum_{i=0}^{K_u-1} A_{u,i}\,S_i(x), \qquad
+        S_l(x) = \sum_{i=0}^{K_l-1} A_{l,i}\,S_i(x),
+
+    where the element shape functions :math:`S_i(x)` are the Bernstein polynomials of
+    degree :math:`n = K-1`,
+    .. math::
+        S_i(x) \;=\; \binom{n}{i}\,x^{\,i}\,(1-x)^{\,n-i}, \qquad i = 0, \ldots, n.
+
+    The class function is
+    .. math::
+        C(x) \;=\; x^{\,n_1}\,\bigl(1-x\bigr)^{\,n_2}.
+
+    The scalars :math:`\tau_u` and :math:`\tau_l` are trailing-edge offsets that
+    govern the trailing-edge thickness; specifically
+    .. math::
+        t_{\mathrm{TE}} \;=\; \tau_u - \tau_l .
+    
+    By default, all coefficients :math:`A_{u,i}` and :math:`A_{l,i}` are initialized to 1, so that
+    :math:`\sum_i S_i(x) = 1` (partition of unity) and the initial surfaces reduce to
+    :math:`y_u(x) = C(x) + \tau_u` and :math:`y_l(x) = C(x) + \tau_l`.
+
+    References:
+        [1]: Kulfan, Brenda, and John Bussoletti. "" Fundamental" parameteric geometry
+            representations for aircraft component shapes." 11th AIAA/ISSMO multidisciplinary
+            analysis and optimization conference. 2006.
+    """
 
     def __init__(
         self,
@@ -42,7 +101,18 @@ class CST(nn.Module):
         upper_te_thickness: float = 0.0,
         lower_te_thickness: float = 0.0,
     ) -> None:
-        
+        r"""Initialize the Hicks-Henne representation.
+
+        Args:
+            n1: Optional Class-function exponent :math:`n_1` in :math:`C(x) = x^{n_1}(1-x)^{n_2}`.
+            n2: Optional Class-function exponent :math:`n_2` in :math:`C(x) = x^{n_1}(1-x)^{n_2}`.
+            upper_basis_count: Optional Number of Bernstein basis functions for the upper surface.
+                Internally uses Bernstein polynomial of degree ``n = upper_basis_count - 1``.
+            lower_basis_count: Optional Number of Bernstein basis functions for the lower surface.
+                Internally uses Bernstein polynomial of degree ``n = lower_basis_count - 1``.
+            upper_te_thickness: Optional Trailing-edge offset added to the upper surface.
+            lower_te_thickness: Optional Trailing-edge offset added to the lower surface.
+        """
         super().__init__()
 
         # Save attributes in buffer so that they can be saved with state_dict
@@ -66,6 +136,21 @@ class CST(nn.Module):
         x: torch.Tensor = None,
         num_pts: int = 100
     ) -> tuple[torch.Tensor, torch.Tensor]:
+        r"""Compute the CST y-coordinates for upper and lower surfaces.
+
+        Args:
+            x: Optional abscissae. Shape :math:`(N,)`, values in :math:`[0, 1]`. Mutually exclusive
+                with `num_pts`.
+            num_pts: Optional number of points :math:`N` to generate on each surface. Mutually
+                exclusive with `x`.
+
+        Returns:
+            tuple[torch.Tensor, torch.Tensor]: Upper and lower surface coordinates of shape
+                :math:`(N, 2)`.
+        
+        Raises:
+            ValueError: If any :math:`x \notin [0, 1]`.
+        """
         
         # If x is provided check that it is in [0, 1] if not provided create equally spaced x
         if x is not None:
@@ -100,6 +185,18 @@ class CST(nn.Module):
     
 
     def visualize(self, x: torch.Tensor = None, num_pts: int = 100, ax = None):
+        r"""Plot baseline and CST geometry.
+
+        Args:
+            x: Optional abscissae. Shape :math:`(N,)`, values in :math:`[0, 1]`. Mutually exclusive
+                with `num_pts`.
+            num_pts: Optional number of points :math:`N` to generate on each surface. Mutually
+                exclusive with `x`.
+            ax: Optional Matplotlib Axes to draw on. If `None`, a new figure/axes is created.
+        
+        Returns:
+            tuple[fig, ax]: The figure and axes used for plotting.
+        """
         if ax is None:
             fig, ax = plt.subplots()
         else:

@@ -34,6 +34,6 @@ Differentiable geometry representations for shape parameterization and optimizat
     - [x] Add visualization method.
     - [x] Add type hints and docstrings.
     - [x] Add test script.
-    - [ ] Add documentation.
+    - [x] Add documentation.
     - [ ] Merge with main branch.
     - [ ] Create a tag and push it to create a release.

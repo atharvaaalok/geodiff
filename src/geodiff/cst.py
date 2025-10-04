@@ -112,8 +112,14 @@ class CST(nn.Module):
                 Internally uses Bernstein polynomial of degree ``n = lower_basis_count - 1``.
             upper_te_thickness: Optional Trailing-edge offset added to the upper surface.
             lower_te_thickness: Optional Trailing-edge offset added to the lower surface.
+        
+        Raises:
+            ValueError: If either of the upper or lower trailing edge thickness is negative.
         """
         super().__init__()
+
+        if (upper_te_thickness < 0.0) or (lower_te_thickness < 0.0):
+            raise ValueError('The upper and lower trailing edge thickness should be non-negative.')
 
         # Save attributes in buffer so that they can be saved with state_dict
         self.register_buffer('n1', torch.tensor(n1))
@@ -175,7 +181,7 @@ class CST(nn.Module):
 
         # Compute the y coordinates of points on the shape
         y_upper = C * S_upper + self.upper_te_thickness
-        y_lower = C * S_lower + self.lower_te_thickness
+        y_lower = C * S_lower - self.lower_te_thickness
 
         # Return the (x, y) coordinate pairs of points on the shape
         X_upper = torch.stack([x, y_upper], dim = 1)

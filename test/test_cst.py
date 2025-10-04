@@ -4,7 +4,7 @@ import torch
 from geodiff.cst import CST
 from geodiff.loss_functions.chamfer import ChamferLoss
 
-from .utils import circle, square, normalize_0_to_1
+from .utils import square, normalize_0_to_1
 
 
 # Get points on a square (curve to fit)

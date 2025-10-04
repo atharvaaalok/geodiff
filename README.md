@@ -33,7 +33,7 @@ Differentiable geometry representations for shape parameterization and optimizat
     - [x] Implement the CST class.
     - [x] Add visualization method.
     - [ ] Add type hints and docstrings.
-    - [ ] Add test script.
+    - [x] Add test script.
     - [ ] Add documentation.
     - [ ] Merge with main branch.
     - [ ] Create a tag and push it to create a release.

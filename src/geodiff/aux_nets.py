@@ -11,7 +11,7 @@ class PreAuxNet(nn.Module):
     In :math:`nD` it first maps :math:`[0, 1]^n` to a :math:`(n+1)`-sphere and then transforms that
     to a simple closed manifold using anisotropic radial scaling.
     """
-    
+
     def __init__(
         self,
         geometry_dim: int,

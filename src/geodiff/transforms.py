@@ -5,7 +5,7 @@ import torch
 
 def closed_transform_2d(t: torch.Tensor) -> torch.Tensor:
     r"""Map :math:`t` in :math:`[0, 1]` to points :math:`(x, y)` on the unit circle.
-    
+
     Map :math:`t \in [0, 1]` to:
     .. math::
         \theta &= 2 \pi t \\
@@ -14,7 +14,7 @@ def closed_transform_2d(t: torch.Tensor) -> torch.Tensor:
 
     Args:
         t: Tensor of values in [0, 1]. Shape :math:`(N, 1)`.
-    
+
     Returns:
         torch.Tensor: Matrix of coordinates (x, y) on the unit circle. Shape :math:`(N, 2)`.
     """
@@ -28,7 +28,7 @@ def closed_transform_2d(t: torch.Tensor) -> torch.Tensor:
 
 def closed_transform_3d(ts: torch.Tensor) -> torch.Tensor:
     r"""Map :math:`(t, s)` in :math:`[0, 1]^2` to points :math:`(x, y, z)` on the unit sphere.
-    
+
     Map :math:`(t, s) \in [0, 1]^2` to:
     .. math::
         \theta &= 2 \pi t \qquad \phi = \pi s
@@ -38,7 +38,7 @@ def closed_transform_3d(ts: torch.Tensor) -> torch.Tensor:
 
     Args:
         ts: Tensor of (t, s) values in [0, 1]. Shape :math:`(N, 2)`.
-    
+
     Returns:
         torch.Tensor: Matrix of coordinates (x, y, z) on the unit sphere. Shape :math:`(N, 3)`.
     """

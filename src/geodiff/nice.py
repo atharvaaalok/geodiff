@@ -86,7 +86,7 @@ class NICE(nn.Module):
             out_f = preaux_net_out_f
         )
 
-        
+
         # Create a base mask to define the first partition
         d_partition = (geometry_dim // 2) if (geometry_dim % 2 == 0) else (geometry_dim + 1) // 2
         mask1 = torch.tensor([True] * d_partition + [False] * (geometry_dim - d_partition),
@@ -101,7 +101,7 @@ class NICE(nn.Module):
         self.coupling_nets = nn.ModuleList()
         for i in range(layer_count):
             self.coupling_nets.append(copy.deepcopy(coupling_net))
-        
+
 
         # Use batchnormalization with each coupling layer
         self.normalization_layers = nn.ModuleList()
@@ -125,7 +125,7 @@ class NICE(nn.Module):
                 Mutually exclusive with `num_pts`.
             num_pts: Optional number of points :math:`N` to generate on the surface. Mututally
                 exclusive with `T`.
-        
+
         Returns:
             torch.Tensor: Matrix of coordinates of points on the geometry. Shape :math:`(N, d)`,
                 where :math:`d` is the dimension of the geometry.
@@ -202,7 +202,7 @@ class NICE(nn.Module):
             fig, ax = plt.subplots()
         else:
             fig = ax.figure
-        
+
         # Move to CPU for matplotlib
         X = self.forward(T = T, num_pts = num_pts)
         X = X.detach().cpu()

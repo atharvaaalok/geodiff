@@ -19,6 +19,7 @@ project:
   - file: geodiff.md
   - file: hicks_henne.ipynb
   - file: cst.ipynb
+  - file: nice.ipynb
 
 
 site:

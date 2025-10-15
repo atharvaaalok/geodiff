@@ -48,7 +48,7 @@ Differentiable geometry representations for shape parameterization and optimizat
 - [ ] RealNVP normalizing flow parameterization.
     - [x] Implement the RealNVP class.
     - [x] Add visualization method.
-    - [ ] Add type hints and docstrings.
+    - [x] Add type hints and docstrings.
     - [ ] Add test script.
     - [ ] Add documentation.
     - [ ] Merge with main branch.

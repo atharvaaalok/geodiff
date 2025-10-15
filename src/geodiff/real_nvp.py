@@ -9,8 +9,8 @@ from geodiff.aux_nets import PreAuxNet
 
 
 class RealNVP(nn.Module):
-    r"""Real Non-Volume Preserving (RealNVP) architecture as described in [1]_ pre-composed with a
-    Pre-Auxilliary network.
+    r"""Real-valued Non-Volume Preserving (RealNVP) architecture as described in [1]_ pre-composed
+    with a Pre-Auxilliary network.
 
     This module generates a closed, non-self-intersecting base geometry via a PreAuxNet and then
     applies a stack of RealNVP layers.

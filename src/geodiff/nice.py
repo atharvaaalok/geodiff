@@ -117,7 +117,7 @@ class NICE(nn.Module):
             self.log_scale = nn.Parameter(torch.zeros(geometry_dim))
 
 
-    def forward(self, T: torch.Tensor = None, num_pts: int = 100) -> torch.Tensor:
+    def forward(self, T: torch.Tensor = None, num_pts: int = 1000) -> torch.Tensor:
         r"""Compute the coordinates of the shape represented by the NICE object.
 
         Args:
@@ -183,3 +183,38 @@ class NICE(nn.Module):
             X = X * torch.exp(self.log_scale)
 
         return X
+
+
+    def visualize(self, T: torch.Tensor = None, num_pts: int = 1000, ax = None):
+        r"""Plot geometry represented by the NICE object.
+
+        Args:
+            T: Options samples in the input domain which are mapped to points on the geometry.
+                Mutually exclusive with `num_pts`.
+            num_pts: Optional number of points :math:`N` to generate on the surface. Mututally
+                exclusive with `T`.
+            ax: Optional Matplotlib Axes to draw on. If `None`, a new figure/axes is created.
+
+        Returns:
+            tuple[fig, ax]: The figure and axes used for plotting.
+        """
+        if ax is None:
+            fig, ax = plt.subplots()
+        else:
+            fig = ax.figure
+        
+        # Move to CPU for matplotlib
+        X = self.forward(T = T, num_pts = num_pts)
+        X = X.detach().cpu()
+
+        # Plot the shape
+        ax.plot(X[:, 0], X[:, 1], linestyle = '-', linewidth = 2, color = 'orange', alpha = 0.7,
+                label = 'curve')
+
+        ax.set_xlabel('x')
+        ax.set_ylabel('y')
+        ax.set_aspect('equal')
+        ax.set_title('NICE parameterization')
+        ax.legend(loc = 'upper center', bbox_to_anchor = (0.5, -0.12), ncol = 2)
+
+        return fig, ax

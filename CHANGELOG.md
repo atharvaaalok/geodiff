@@ -1,3 +1,12 @@
+## 0.5.0
+Add RealNVP shape representation. This version update includes the following changes:
+- RealNVP parameterization.
+    - Implement the RealNVP class.
+    - Add visualization method.
+    - Add test script.
+    - Add documentation.
+
+
 ## 0.4.0
 Add NICE shape representation. This version update includes the following changes:
 - NICE parameterization.
@@ -18,6 +27,7 @@ Add CST shape representation. This version update includes the following changes
     - Add test script.
     - Add documentation.
 - Minor improvements to Hicks-Henne documentation.
+
 
 ## 0.2.0
 Add Hicks-Henne shape representation. This version update includes the following changes:

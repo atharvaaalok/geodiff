@@ -41,7 +41,7 @@ Differentiable geometry representations for shape parameterization and optimizat
     - [x] Implement the NICE class.
     - [x] Add visualization method.
     - [x] Add type hints and docstrings.
-    - [ ] Add test script.
+    - [x] Add test script.
     - [ ] Add documentation.
     - [ ] Merge with main branch.
     - [ ] Create a tag and push it to create a release.

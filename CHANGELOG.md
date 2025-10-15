@@ -1,3 +1,15 @@
+## 0.4.0
+Add NICE shape representation. This version update includes the following changes:
+- NICE parameterization.
+    - Add closed transforms for 2D and 3D.
+    - Add template architectures for MLP and ResMLP.
+    - Add Pre-Aux net class.
+    - Implement the NICE class.
+    - Add visualization method.
+    - Add test script.
+    - Add documentation.
+
+
 ## 0.3.0
 Add CST shape representation. This version update includes the following changes:
 - CST parameterization.

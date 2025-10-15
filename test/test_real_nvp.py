@@ -16,7 +16,7 @@ X_square = square(num_pts)
 X_square = normalize_0_to_1(X_square)
 
 
-# Create a NICE object
+# Create a RealNVP object
 # First create the translation and scaling networks to pass to the RealNVP initializer
 translation_net = ResMLP(input_dim = 1, output_dim = 1, layer_count = 2, hidden_dim = 20)
 scale_net = ResMLP(input_dim = 1, output_dim = 1, layer_count = 2, hidden_dim = 20,

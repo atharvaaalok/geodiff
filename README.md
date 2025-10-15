@@ -38,7 +38,7 @@ Differentiable geometry representations for shape parameterization and optimizat
     - [x] Merge with main branch.
     - [x] Create a tag and push it to create a release.
 - [ ] NICE normalizing flow parameterization.
-    - [ ] Implement the NICE class.
+    - [x] Implement the NICE class.
     - [ ] Add visualization method.
     - [ ] Add type hints and docstrings.
     - [ ] Add test script.

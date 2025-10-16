@@ -54,7 +54,7 @@ Differentiable geometry representations for shape parameterization and optimizat
     - [x] Merge with main branch.
     - [x] Create a tag and push it to create a release.
 - [ ] NIGnet parameterization.
-    - [ ] Implement the NIGnet class.
+    - [x] Implement the NIGnet class.
     - [ ] Add visualization method.
     - [ ] Add type hints and docstrings.
     - [ ] Add test script.

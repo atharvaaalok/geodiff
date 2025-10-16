@@ -21,6 +21,7 @@ project:
   - file: cst.ipynb
   - file: nice.ipynb
   - file: real_nvp.ipynb
+  - file: nig_net.ipynb
 
 
 site:

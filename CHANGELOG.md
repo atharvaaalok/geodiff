@@ -1,3 +1,13 @@
+## 0.6.0
+Add NIGnet shape representation. This version update includes the following changes:
+- NIGnet parameterization.
+    - Add template architectures for monotonic networks MinMaxNet and SmoothMinMaxNet.
+    - Implement the NIGnet class.
+    - Add visualization method.
+    - Add test script.
+    - Add documentation.
+
+
 ## 0.5.0
 Add RealNVP shape representation. This version update includes the following changes:
 - RealNVP parameterization.

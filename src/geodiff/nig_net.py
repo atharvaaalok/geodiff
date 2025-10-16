@@ -96,7 +96,7 @@ class NIGnet(nn.Module):
         for i in range(layer_count):
             self.linear_layers.append(linear_class(geometry_dim, geometry_dim))
             self.monotonic_nets.append(copy.deepcopy(monotonic_net))
-        
+
 
         # Use batchnormalization with each coupling layer
         self.normalization_layers = nn.ModuleList()
@@ -136,10 +136,10 @@ class NIGnet(nn.Module):
         for linear_layer, monotonic_net in zip(self.linear_layers, self.monotonic_nets):
             if self.use_residual_connection:
                 residual = X
-            
+
             # Apply linear transformation
             X = linear_layer(X)
-            
+
             # Apply monotonic network to each component of x separately
             if self.geometry_dim == 2:
                 x1, x2 = X[:, 0:1], X[:, 1:2]
@@ -147,11 +147,11 @@ class NIGnet(nn.Module):
             elif self.geometry_dim == 3:
                 x1, x2, x3 = X[:, 0:1], X[:, 1:2], X[:, 2:3]
                 X = torch.cat([monotonic_net(x1), monotonic_net(x2), monotonic_net(x3)], dim = 1)
-            
+
             if self.use_residual_connection:
                 # Apply residual connection
                 X = (X + residual) / 2.0
-        
+
         return X
 
 
@@ -220,28 +220,28 @@ class ExpLinear(nn.Module):
     def __init__(self, in_features: int, out_features: int, bias: bool = True) -> None:
         """
         Initialize the ExpLinear module.
-        
+
         Raises
         ------
         AssertionError
             If in_features != out_features.
         """
-        
+
         super().__init__()
 
         assert in_features == out_features, 'ExpLinear requires in_features == out_features'
 
         self.in_features = in_features
         self.out_features = out_features
-        
+
         self.W = nn.Parameter(torch.Tensor(out_features, in_features))
         if bias:
             self.bias = nn.Parameter(torch.Tensor(out_features))
         else:
             self.register_parameter('bias', None)
-        
+
         self.reset_parameters()
-    
+
 
     def reset_parameters(self) -> None:
         """
@@ -254,7 +254,7 @@ class ExpLinear(nn.Module):
             fan_in, _ = nn.init._calculate_fan_in_and_fan_out(self.W)
             bound = 1 / math.sqrt(fan_in) if fan_in > 0 else 0
             nn.init.uniform_(self.bias, -bound, bound)
-    
+
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """
@@ -267,12 +267,12 @@ class ExpLinear(nn.Module):
         ----------
         x : torch.Tensor
             Input tensor of shape (N, in_features).
-        
+
         Returns
         -------
         torch.Tensor
             Output tensor of shape (N, out_features)
         """
-        
+
         exp_weight = torch.matrix_exp(self.W)
         return F.linear(x, exp_weight.t(), self.bias)

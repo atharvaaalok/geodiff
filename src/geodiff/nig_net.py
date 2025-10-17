@@ -7,8 +7,6 @@ import torch
 from torch import nn
 import torch.nn.functional as F
 
-from geodiff.aux_nets import PreAuxNet
-
 
 class NIGnet(nn.Module):
     r"""Neural Injective Geometry network (NIGnet) architecture as described in [1]_.
@@ -29,12 +27,8 @@ class NIGnet(nn.Module):
         self,
         geometry_dim: int,
         layer_count: int,
+        preaux_net: nn.Module,
         monotonic_net: nn.Module,
-        preaux_net_layer_count: int,
-        preaux_net_hidden_dim: int,
-        preaux_net_act_f = nn.GELU,
-        preaux_net_norm_f = nn.BatchNorm1d,
-        preaux_net_out_f = nn.Softplus,
         use_batchnormalization: bool = False,
         use_residual_connection: bool = True,
         intersection_mode: str = 'possible',
@@ -44,13 +38,8 @@ class NIGnet(nn.Module):
         Args:
             geometry_dim: Dimension of the output geometry, e.g. 2d, 3d etc.
             layer_count: Number of hidden layers in the NICE net.
+            preaux_net: A torch network that is used as the Pre-Aux net.
             coupling_net: A torch monotonic network that is used as the monotonic function.
-            preaux_net_layer_count: Number of hidden layers in the Pre-Aux net. If `None` then only
-                closed transform is performed.
-            preaux_net_hidden_dim: Number of neurons in each hidden layer of the Pre-Aux net.
-            preaux_net_act_f: Activation function used in the Pre-Aux net.
-            preaux_net_norm_f: Normalization function used in the Pre-Aux net.
-            preaux_net_out_f: Output activation function used in the Pre-Aux net.
             use_batchnormalization: If `True`, applies batch normalization after each coupling
                 layer.
             use_residual_connection: If `True`, applies a residual connection after each coupling
@@ -63,13 +52,6 @@ class NIGnet(nn.Module):
         # Save attributes in buffer so that they can be saved with state_dict
         self.register_buffer('geometry_dim', torch.tensor(geometry_dim, dtype = torch.int64))
         self.register_buffer('layer_count', torch.tensor(layer_count, dtype = torch.int64))
-        if preaux_net_layer_count is not None:
-            self.register_buffer('preaux_net_layer_count', torch.tensor(preaux_net_layer_count,
-                                                                    dtype = torch.int64))
-        else:
-            self.register_buffer('preaux_net_layer_count', torch.tensor(-1, dtype = torch.int64))
-        self.register_buffer('preaux_net_hidden_dim', torch.tensor(preaux_net_hidden_dim,
-                                                                   dtype = torch.int64))
         self.register_buffer('use_batchnormalization', torch.tensor(use_batchnormalization,
                                                                dtype = torch.bool))
         self.register_buffer('use_residual_connection', torch.tensor(use_residual_connection,
@@ -78,15 +60,8 @@ class NIGnet(nn.Module):
         self.intersection_mode = intersection_mode
 
 
-        # Create a Pre-Aux Net to close the shape
-        self.preaux_net = PreAuxNet(
-            geometry_dim = geometry_dim,
-            layer_count = preaux_net_layer_count,
-            hidden_dim = preaux_net_hidden_dim,
-            act_f = preaux_net_act_f,
-            norm_f = preaux_net_norm_f, 
-            out_f = preaux_net_out_f
-        )
+        # Use a Pre-Aux Net to create baseline closed manifold
+        self.preaux_net = copy.deepcopy(preaux_net)
 
 
         # Create linear layers and monotonic nets for each NIGnet layer

@@ -1,11 +1,16 @@
 import matplotlib.pyplot as plt
 import torch
 
+from geodiff.aux_nets import PreAuxNet
 from geodiff.real_nvp import RealNVP
 from geodiff.loss_functions.chamfer import ChamferLoss
 from geodiff.template_architectures import ResMLP
 
 from .utils import square, normalize_0_to_1
+
+
+# Set the seed for reproducibility
+torch.manual_seed(2)
 
 
 # Get points on a square (curve to fit)
@@ -17,17 +22,17 @@ X_square = normalize_0_to_1(X_square)
 
 
 # Create a RealNVP object
-# First create the translation and scaling networks to pass to the RealNVP initializer
+# First create the Pre-Aux, translation and scaling networks to pass to the RealNVP initializer
+preaux_net = PreAuxNet(geometry_dim = 2, layer_count = 2, hidden_dim = 20)
 translation_net = ResMLP(input_dim = 1, output_dim = 1, layer_count = 2, hidden_dim = 20)
 scale_net = ResMLP(input_dim = 1, output_dim = 1, layer_count = 2, hidden_dim = 20,
                    act_f = torch.nn.Tanh)
 real_nvp = RealNVP(
     geometry_dim = 2,
     layer_count = 4,
+    preaux_net = preaux_net,
     translation_net = translation_net,
     scale_net = scale_net,
-    preaux_net_layer_count = 2,
-    preaux_net_hidden_dim = 20,
 )
 
 
@@ -59,6 +64,6 @@ for epoch in range(epochs):
 
 
 # Visualize the fitted RealNVP shape
-fig, ax = real_nvp.visualize(num_pts = num_pts)
+fig, ax = real_nvp.visualize(num_pts = 10000)
 plt.tight_layout()
 plt.show()

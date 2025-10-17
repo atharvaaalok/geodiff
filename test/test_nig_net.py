@@ -1,11 +1,16 @@
 import matplotlib.pyplot as plt
 import torch
 
+from geodiff.aux_nets import PreAuxNet
 from geodiff.nig_net import NIGnet
 from geodiff.monotonic_nets import SmoothMinMaxNet
 from geodiff.loss_functions.chamfer import ChamferLoss
 
 from .utils import square, normalize_0_to_1
+
+
+# Set the seed for reproducibility
+torch.manual_seed(42)
 
 
 # Get points on a square (curve to fit)
@@ -17,14 +22,14 @@ X_square = normalize_0_to_1(X_square)
 
 
 # Create a NIGnet object
-# First create a monotonic network to pass to the NIGnet initializer
+# First create Pre-Aux and monotonic networks to pass to the NIGnet initializer
+preaux_net = PreAuxNet(geometry_dim = 2, layer_count = 2, hidden_dim = 20)
 monotonic_net = SmoothMinMaxNet(input_dim = 1, n_groups = 6, nodes_per_group = 6)
 nig_net = NIGnet(
     geometry_dim = 2,
     layer_count = 4,
+    preaux_net = preaux_net,
     monotonic_net = monotonic_net,
-    preaux_net_layer_count = 2,
-    preaux_net_hidden_dim = 20,
 )
 
 

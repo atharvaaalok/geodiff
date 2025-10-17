@@ -22,6 +22,7 @@ project:
   - file: nice.ipynb
   - file: real_nvp.ipynb
   - file: nig_net.ipynb
+  - file: neural_ode.ipynb
 
 
 site:

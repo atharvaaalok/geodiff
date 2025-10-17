@@ -1,3 +1,10 @@
+## 0.8.0
+Make Pre-Aux net modular by defining it separately from the invertible networks.
+- Make Pre-Aux net modular for all representations.
+- Change test scripts for all representations.
+- Update documentation for all representations.
+
+
 ## 0.7.0
 Add NeuralODE shape representation. This version update includes the following changes:
 - NeuralODE parameterization.

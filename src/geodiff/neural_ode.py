@@ -18,7 +18,7 @@ class NeuralODE(nn.Module):
 
     .. math:
         TODO
-    
+
     References:
         [1]: Chen, Ricky TQ, et al. "Neural ordinary differential equations." Advances in neural
             information processing systems 31 (2018).
@@ -45,11 +45,11 @@ class NeuralODE(nn.Module):
         elif geometry_dim == 3:
             self.closed_transform = closed_transform_3d
 
-        
+
         # Create an object of ODEFunc class to use with NeuralODE forward pass using the provided
         # ODE network definition
         self.ode_f = ODEFunc(geometry_dim = geometry_dim, ode_net = ode_net)
-    
+
 
     def forward(self, T: torch.Tensor = None, num_pts: int = 1000) -> torch.Tensor:
         r"""Compute the coordinates of the shape represented by the NeuralODE object.
@@ -91,7 +91,7 @@ class NeuralODE(nn.Module):
         X = Y[-1, :, 0, :]
 
         return X
-    
+
 
     def visualize(self, T: torch.Tensor = None, num_pts: int = 1000, ax = None):
         r"""Plot geometry represented by the NeuralODE object.
@@ -132,14 +132,31 @@ class ODEFunc(nn.Module):
     r"""Right-hand side of the ODE: dX/dt = f_θ(X, t).
     """
 
-    def __init__(self, geometry_dim: int, ode_net: nn.Module):
+    def __init__(self, geometry_dim: int, ode_net: nn.Module) -> None:
+        r"""Initialize the ODEFunc object.
+        
+        This forms a thin wrapper around the user-provided `ode_net` to make the forward pass
+        compatible with `odeint` function from `torchdiffeq`.
+
+        Args:
+            geometry_dim: Dimension of the output geometry, e.g. 2d, 3d etc.
+            ode_net: A torch network for the function defining the neural ordinary differential
+                equation.
+        """
         super().__init__()
 
         self.geometry_dim = geometry_dim
         self.ode_net = copy.deepcopy(ode_net)
-    
 
-    def forward(self, t, y):
+
+    def forward(self, t: torch.Tensor, y: torch.Tensor) -> torch.Tensor:
+        r"""Compute :math:`dy/dt = f_\theta(y, t)`, where :math:`f_\theta` is the `ode_net`
+        defining the ODE evolution.
+
+        Args:
+            t: Scalar time at which to compute the time rate of change of state.
+            y: State tensor. Shape :math:`(..., d)`, where :math:`d` is the geometry dimension.
+        """
         # Broadcast t to appropriate shape to concatenate with y
         t = torch.broadcast_to(t.to(y), y[..., :1].shape)
 

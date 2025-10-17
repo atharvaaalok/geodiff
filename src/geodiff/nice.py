@@ -5,8 +5,6 @@ import numpy as np
 import torch
 from torch import nn
 
-from geodiff.aux_nets import PreAuxNet
-
 
 class NICE(nn.Module):
     r"""Nonlinear Independent Components Estimation (NICE) architecture as described in [1]_
@@ -27,12 +25,8 @@ class NICE(nn.Module):
         self,
         geometry_dim: int,
         layer_count: int,
+        preaux_net: nn.Module,
         coupling_net: nn.Module,
-        preaux_net_layer_count: int,
-        preaux_net_hidden_dim: int,
-        preaux_net_act_f = nn.GELU,
-        preaux_net_norm_f = nn.BatchNorm1d,
-        preaux_net_out_f = nn.Softplus,
         volume_preserving: bool = False,
         use_batchnormalization: bool = False,
         use_residual_connection: bool = True,
@@ -42,13 +36,8 @@ class NICE(nn.Module):
         Args:
             geometry_dim: Dimension of the output geometry, e.g. 2d, 3d etc.
             layer_count: Number of hidden layers in the NICE net.
+            preaux_net: A torch network that is used as the Pre-Aux net.
             coupling_net: A torch network that is used as the coupling function.
-            preaux_net_layer_count: Number of hidden layers in the Pre-Aux net. If `None` then only
-                closed transform is performed.
-            preaux_net_hidden_dim: Number of neurons in each hidden layer of the Pre-Aux net.
-            preaux_net_act_f: Activation function used in the Pre-Aux net.
-            preaux_net_norm_f: Normalization function used in the Pre-Aux net.
-            preaux_net_out_f: Output activation function used in the Pre-Aux net.
             volume_preserving: If `False`, applies a learnable positive scaling at the output. If
                 `True`, no scaling is applied and the transformation is volume preserving.
             use_batchnormalization: If `True`, applies batch normalization after each coupling
@@ -61,13 +50,6 @@ class NICE(nn.Module):
         # Save attributes in buffer so that they can be saved with state_dict
         self.register_buffer('geometry_dim', torch.tensor(geometry_dim, dtype = torch.int64))
         self.register_buffer('layer_count', torch.tensor(layer_count, dtype = torch.int64))
-        if preaux_net_layer_count is not None:
-            self.register_buffer('preaux_net_layer_count', torch.tensor(preaux_net_layer_count,
-                                                                    dtype = torch.int64))
-        else:
-            self.register_buffer('preaux_net_layer_count', torch.tensor(-1, dtype = torch.int64))
-        self.register_buffer('preaux_net_hidden_dim', torch.tensor(preaux_net_hidden_dim,
-                                                                   dtype = torch.int64))
         self.register_buffer('volume_preserving', torch.tensor(volume_preserving,
                                                                dtype = torch.bool))
         self.register_buffer('use_batchnormalization', torch.tensor(use_batchnormalization,
@@ -76,15 +58,8 @@ class NICE(nn.Module):
                                                                dtype = torch.bool))
 
 
-        # Create a Pre-Aux Net to close the shape
-        self.preaux_net = PreAuxNet(
-            geometry_dim = geometry_dim,
-            layer_count = preaux_net_layer_count,
-            hidden_dim = preaux_net_hidden_dim,
-            act_f = preaux_net_act_f,
-            norm_f = preaux_net_norm_f, 
-            out_f = preaux_net_out_f
-        )
+        # Use a Pre-Aux Net to create baseline closed manifold
+        self.preaux_net = copy.deepcopy(preaux_net)
 
 
         # Create a base mask to define the first partition

@@ -69,7 +69,7 @@ Differentiable geometry representations for shape parameterization and optimizat
     - [x] Add documentation.
     - [x] Merge with main branch.
     - [x] Create a tag and push it to create a release.
-- [ ] Make Pre-Aux net modular by defining it separately from the invertible networks.
+- [x] Make Pre-Aux net modular by defining it separately from the invertible networks.
     - [x] Make Pre-Aux net modular for NICE.
     - [x] Change test script for NICE.
     - [x] Make Pre-Aux net modular for all representations.
@@ -77,4 +77,4 @@ Differentiable geometry representations for shape parameterization and optimizat
     - [x] Update documentation for all representations.
         - [x] Fix random seed for replicating results.
     - [x] Merge with main branch.
-    - [ ] Create a tag and push it to create a release.
+    - [x] Create a tag and push it to create a release.

@@ -171,7 +171,7 @@ class SmoothMinMaxNet(nn.Module):
 
     @staticmethod
     def _smooth_max(z: torch.Tensor, beta: float, dim: int) -> None:
-        """
+        r"""
         Computes a smooth approximation to the maximum function using LogSumExp function.
 
         The smooth maximum with parameter :math:`\beta` is defined as:

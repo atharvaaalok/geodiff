@@ -64,7 +64,7 @@ Differentiable geometry representations for shape parameterization and optimizat
 - [ ] NeuralODE parameterization.
     - [x] Implement the NeuralODE class.
     - [x] Add visualization method.
-    - [ ] Add type hints and docstrings.
+    - [x] Add type hints and docstrings.
     - [ ] Add test script.
     - [ ] Add documentation.
     - [ ] Merge with main branch.

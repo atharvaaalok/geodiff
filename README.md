@@ -76,5 +76,5 @@ Differentiable geometry representations for shape parameterization and optimizat
     - [x] Change test scripts for all representations.
     - [x] Update documentation for all representations.
         - [x] Fix random seed for replicating results.
-    - [ ] Merge with main branch.
+    - [x] Merge with main branch.
     - [ ] Create a tag and push it to create a release.

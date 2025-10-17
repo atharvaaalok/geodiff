@@ -72,7 +72,7 @@ Differentiable geometry representations for shape parameterization and optimizat
 - [ ] Make Pre-Aux net modular by defining it separately from the invertible networks.
     - [x] Make Pre-Aux net modular for NICE.
     - [x] Change test script for NICE.
-    - [ ] Make Pre-Aux net modular for all representations.
+    - [x] Make Pre-Aux net modular for all representations.
     - [ ] Change test scripts for all representations.
     - [ ] Update documentation for all representations.
         - [ ] Fix random seed for replicating results.

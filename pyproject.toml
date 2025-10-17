@@ -16,6 +16,7 @@ dependencies = [
     "matplotlib>=3.10.6",
     "numpy>=2.3.3",
     "torch>=2.8.0",
+    "torchdiffeq>=0.2.5",
 ]
 keywords = [
     "differentiable-geometry", "shape-optimization", "PyTorch", "machine-learning", "deep-learning",

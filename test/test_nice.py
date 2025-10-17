@@ -1,11 +1,16 @@
 import matplotlib.pyplot as plt
 import torch
 
+from geodiff.aux_nets import PreAuxNet
 from geodiff.nice import NICE
 from geodiff.loss_functions.chamfer import ChamferLoss
 from geodiff.template_architectures import ResMLP
 
 from .utils import square, normalize_0_to_1
+
+
+# Set the seed for reproducibility
+torch.manual_seed(42)
 
 
 # Get points on a square (curve to fit)
@@ -17,14 +22,14 @@ X_square = normalize_0_to_1(X_square)
 
 
 # Create a NICE object
-# First create a coupling network to pass to the NICE initializer
+# First create Pre-Aux and coupling networks to pass to the NICE initializer
+preaux_net = PreAuxNet(geometry_dim = 2, layer_count = 2, hidden_dim = 20)
 coupling_net = ResMLP(input_dim = 1, output_dim = 1, layer_count = 2, hidden_dim = 20)
 nice = NICE(
     geometry_dim = 2,
     layer_count = 4,
+    preaux_net = preaux_net,
     coupling_net = coupling_net,
-    preaux_net_layer_count = 2,
-    preaux_net_hidden_dim = 20,
 )
 
 

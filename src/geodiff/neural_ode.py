@@ -25,7 +25,11 @@ class NeuralODE(nn.Module):
         [2]: Chen, Ricky TQ. "torchdiffeq, 2018." URL https://github.com/rtqichen/torchdiffeq 14.
     """
 
-    def __init__(self, geometry_dim: int, ode_net: nn.Module) -> None:
+    def __init__(
+        self,
+        geometry_dim: int,
+        ode_net: nn.Module
+    ) -> None:
         r"""Initialize the NeuralODE object.
 
         Args:

@@ -73,7 +73,7 @@ Differentiable geometry representations for shape parameterization and optimizat
     - [x] Make Pre-Aux net modular for NICE.
     - [x] Change test script for NICE.
     - [x] Make Pre-Aux net modular for all representations.
-    - [ ] Change test scripts for all representations.
+    - [x] Change test scripts for all representations.
     - [ ] Update documentation for all representations.
         - [ ] Fix random seed for replicating results.
     - [ ] Merge with main branch.

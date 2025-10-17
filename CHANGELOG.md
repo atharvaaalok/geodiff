@@ -1,3 +1,12 @@
+## 0.7.0
+Add NeuralODE shape representation. This version update includes the following changes:
+- NeuralODE parameterization.
+    - Implement the NeuralODE class.
+    - Add visualization method.
+    - Add test script.
+    - Add documentation.
+
+
 ## 0.6.0
 Add NIGnet shape representation. This version update includes the following changes:
 - NIGnet parameterization.

@@ -63,7 +63,7 @@ Differentiable geometry representations for shape parameterization and optimizat
     - [x] Create a tag and push it to create a release.
 - [ ] NeuralODE parameterization.
     - [x] Implement the NeuralODE class.
-    - [ ] Add visualization method.
+    - [x] Add visualization method.
     - [ ] Add type hints and docstrings.
     - [ ] Add test script.
     - [ ] Add documentation.

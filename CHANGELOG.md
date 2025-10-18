@@ -1,3 +1,12 @@
+## 0.9.0
+Add latent code functionality to represent geometry.
+- Add latent code functionality to Pre-Aux nets.
+- Add latent code functionality to all representations.
+- Add test script for training with latent code using autodecoder framework.
+    - Use NICE for the test script.
+    - Fit two latent codes to fit two differently rotated squares.
+
+
 ## 0.8.0
 Make Pre-Aux net modular by defining it separately from the invertible networks.
 - Make Pre-Aux net modular for all representations.

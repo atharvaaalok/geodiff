@@ -31,3 +31,12 @@ def normalize_0_to_1(X: torch.Tensor):
     X_norm[:, 0] = (X_norm[:, 0] - x_min) / (x_max - x_min)
     X_norm[:, 1] = X_norm[:, 1] / (x_max - x_min)
     return X_norm
+
+
+def rotate(X: torch.Tensor, theta: float) -> torch.Tensor:
+    theta = torch.as_tensor(theta, device = X.device)
+    # Form the counter clockwise rotation matrix
+    R_theta = torch.tensor([[torch.cos(theta), torch.sin(theta)],
+                            [-torch.sin(theta), torch.cos(theta)]], device = X.device)
+    X = X @ R_theta
+    return X

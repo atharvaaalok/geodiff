@@ -88,4 +88,4 @@ Differentiable geometry representations for shape parameterization and optimizat
     - [x] Fit two latent codes to fit two differently rotated squares.
 - [x] Add latent code functionality to all representations.
 - [x] Merge with main branch.
-- [ ] Create a tag and push it to create a release.
+- [x] Create a tag and push it to create a release.

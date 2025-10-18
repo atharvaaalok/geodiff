@@ -87,5 +87,5 @@ Differentiable geometry representations for shape parameterization and optimizat
     - [x] Use NICE for the test script.
     - [x] Fit two latent codes to fit two differently rotated squares.
 - [x] Add latent code functionality to all representations.
-- [ ] Merge with main branch.
+- [x] Merge with main branch.
 - [ ] Create a tag and push it to create a release.

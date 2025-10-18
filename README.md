@@ -82,7 +82,7 @@ Differentiable geometry representations for shape parameterization and optimizat
 
 ### Stage 3: Implement Latent Vectors for Geometry Representation
 - [x] Add latent code functionality to Pre-Aux nets.
-- [ ] Add latent code functionality to NICE.
+- [x] Add latent code functionality to NICE.
 - [ ] Add test script for training with latent code using autodecoder framework.
     - [ ] Use NICE for the test script.
     - [ ] Fit two latent codes to fit two differently rotated squares.

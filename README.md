@@ -86,6 +86,6 @@ Differentiable geometry representations for shape parameterization and optimizat
 - [x] Add test script for training with latent code using autodecoder framework.
     - [x] Use NICE for the test script.
     - [x] Fit two latent codes to fit two differently rotated squares.
-- [ ] Add latent code functionality to all representations.
+- [x] Add latent code functionality to all representations.
 - [ ] Merge with main branch.
 - [ ] Create a tag and push it to create a release.

@@ -92,7 +92,12 @@ class NICE(nn.Module):
             self.log_scale = nn.Parameter(torch.zeros(geometry_dim))
 
 
-    def forward(self, T: torch.Tensor = None, num_pts: int = 1000) -> torch.Tensor:
+    def forward(
+        self,
+        T: torch.Tensor = None,
+        num_pts: int = 1000,
+        code: torch.Tensor = None,
+    ) -> torch.Tensor:
         r"""Compute the coordinates of the shape represented by the NICE object.
 
         Args:
@@ -113,10 +118,18 @@ class NICE(nn.Module):
                                       indexing = 'ij')
                 T = torch.stack([t, s], dim = -1).reshape(-1, 2)
         # Put T on the same device as the model
-        T.to(device = next(self.parameters()).device)
+        device = next(self.parameters()).device
+        T.to(device = device)
+
+        if self.preaux_net.latent_dim != 0:
+            # If a single code is provided create copies of it to match the number of T values
+            code = code.to(device)
+            if T.shape[0] != code.shape[0]:
+                code = code.expand(T.shape[0], -1)
+            # Otherwise we assume that for each T the right latent vector has been put in code
 
         # First create a closed transform using the PreAux net
-        X = self.preaux_net(T)
+        X = self.preaux_net(T, code)
 
         # Apply the NICE coupling layers
         mask_switch = True
@@ -160,7 +173,13 @@ class NICE(nn.Module):
         return X
 
 
-    def visualize(self, T: torch.Tensor = None, num_pts: int = 1000, ax = None):
+    def visualize(
+        self,
+        T: torch.Tensor = None,
+        num_pts: int = 1000,
+        code: torch.Tensor = None,
+        ax = None,
+    ):
         r"""Plot geometry represented by the NICE object.
 
         Args:
@@ -179,7 +198,7 @@ class NICE(nn.Module):
             fig = ax.figure
 
         # Move to CPU for matplotlib
-        X = self.forward(T = T, num_pts = num_pts)
+        X = self.forward(T = T, num_pts = num_pts, code = code)
         X = X.detach().cpu()
 
         # Plot the shape

@@ -31,7 +31,7 @@ def closed_transform_3d(ts: torch.Tensor) -> torch.Tensor:
 
     Map :math:`(t, s) \in [0, 1]^2` to:
     .. math::
-        \theta &= 2 \pi t \qquad \phi = \pi s
+        \theta &= 2 \pi t \qquad \phi = arccos(1 - 2s)
         x &= \sin \phi \cos \theta \\
         y &= \sin \phi \sin \theta \\
         z &= \cos \phi
@@ -47,7 +47,7 @@ def closed_transform_3d(ts: torch.Tensor) -> torch.Tensor:
 
     pi = t.new_tensor(math.pi)
     theta = 2 * pi * t
-    phi = pi * s
+    phi = torch.arccos(1 - 2 * s)
 
     sin_phi = torch.sin(phi)
     x = sin_phi * torch.cos(theta)

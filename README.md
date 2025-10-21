@@ -89,3 +89,12 @@ Differentiable geometry representations for shape parameterization and optimizat
 - [x] Add latent code functionality to all representations.
 - [x] Merge with main branch.
 - [x] Create a tag and push it to create a release.
+
+
+### Stage 4: Improve Sampling of Points on the Closed Transform
+- [ ] Sample points in T [0, 1]^d using Farthest Point Sampling for Blue-noise properties.
+    - [ ] Write function to compute FPS.
+    - [ ] Create test script to visualize the point samples with specified number of points.
+- [ ] Transform T to points on closed manifold to preserve uniform point sampling.
+    - [ ] Use the arc cosine formulation for transforming t, s to phi, theta in 3D.
+    - [ ] Update test script to visualize point samples on closed manifold as well.

@@ -93,7 +93,7 @@ Differentiable geometry representations for shape parameterization and optimizat
 
 ### Stage 4: Improve Sampling of Points on the Closed Transform
 - [ ] Sample points in T [0, 1]^d using Farthest Point Sampling for Blue-noise properties.
-    - [ ] Write function to compute FPS.
+    - [x] Write function to compute FPS.
     - [ ] Create test script to visualize the point samples with specified number of points.
 - [ ] Transform T to points on closed manifold to preserve uniform point sampling.
     - [ ] Use the arc cosine formulation for transforming t, s to phi, theta in 3D.

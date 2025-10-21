@@ -96,5 +96,5 @@ Differentiable geometry representations for shape parameterization and optimizat
     - [x] Write function to compute FPS.
     - [x] Create test script to visualize the point samples with specified number of points.
 - [ ] Transform T to points on closed manifold to preserve uniform point sampling.
-    - [ ] Use the arc cosine formulation for transforming t, s to phi, theta in 3D.
+    - [x] Use the arc cosine formulation for transforming t, s to phi, theta in 3D.
     - [ ] Update test script to visualize point samples on closed manifold as well.

@@ -99,4 +99,4 @@ Differentiable geometry representations for shape parameterization and optimizat
     - [x] Use the arc cosine formulation for transforming t, s to phi, theta in 3D.
     - [x] Update test script to visualize point samples on closed manifold as well.
 - [x] Merge with main branch.
-- [ ] Create a tag and push it to create a release.
+- [x] Create a tag and push it to create a release.

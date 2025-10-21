@@ -1,6 +1,6 @@
 [project]
 name = "geodiff"
-version = "0.9.2"
+version = "0.9.3"
 description = "Differentiable geometry representations for shape parameterization and optimization."
 readme = "README.md"
 authors = [

@@ -1,3 +1,10 @@
+## 0.9.3
+Add Pre-Aux net functionality to NeuralODE.
+- Fix Pre-Aux net forward path to work with no latent dim networks.
+- Add Pre-Aux functionality to NeuralODE.
+- Add test script to verify that frozen Pre-Aux nets stay frozen during NeuralODE training.
+
+
 ## 0.9.2
 Add latent vector functionality to NeuralODE.
 - Add latent code functionality to NeuralODE.

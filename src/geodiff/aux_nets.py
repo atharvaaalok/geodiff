@@ -77,7 +77,10 @@ class PreAuxNet(nn.Module):
         closed_manifold = self.closed_transform(T)
 
         # Concatenate latent code to point coordinates and compute the Pre-Aux net forward pass
-        closed_manifold_with_code = torch.cat([closed_manifold, code], dim = 1)
+        if code is not None:
+            closed_manifold_with_code = torch.cat([closed_manifold, code], dim = 1)
+        else:
+            closed_manifold_with_code = closed_manifold
         r = self.forward_stack(closed_manifold_with_code)
 
         # Apply the latent code based radial scaling to points

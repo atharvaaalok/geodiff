@@ -1,3 +1,9 @@
+## 0.9.2
+Add latent vector functionality to NeuralODE.
+- Add latent code functionality to NeuralODE.
+- Add test script to fit NeuralODE to different shapes using latent codes.
+
+
 ## 0.9.1
 Add sampling plan and modify closed transform for uniform samples on closed manifold.
 - Add Farthest Point Sampling for Blue-noise like sampling in the T domain.

@@ -56,7 +56,12 @@ class NeuralODE(nn.Module):
         self.ode_f = ODEFunc(geometry_dim = geometry_dim, ode_net = ode_net)
 
 
-    def forward(self, T: torch.Tensor = None, num_pts: int = 1000) -> torch.Tensor:
+    def forward(
+        self,
+        T: torch.Tensor = None,
+        num_pts: int = 1000,
+        code: torch.Tensor = None,
+    ) -> torch.Tensor:
         r"""Compute the coordinates of the shape represented by the NeuralODE object.
 
         Args:
@@ -72,26 +77,43 @@ class NeuralODE(nn.Module):
         device = next(self.parameters()).device
         if T is None:
             T = sample_T(geometry_dim = self.geometry_dim, num_pts = num_pts, device = device)
+        
+        if self.ode_f.ode_net.input_dim != 0:
+            # If a single code is provided create copies of it to match the number of T values
+            code = code.to(device)
+            if T.shape[0] != code.shape[0]:
+                code = code.expand(T.shape[0], -1)
+            # Otherwise we assume that for each T the right latent vector has been put in code
 
         # Apply the closed transformation
         closed_manifold = self.closed_transform(T)
 
         # Use closed manifold as initial condition - (N, d)
         y0 = closed_manifold
-        # reshape to (N, 1, d) for torchdiffeq batching
-        y0 = closed_manifold[:, None, :]
 
         # Define time integration limits
         time = torch.tensor([0.0, 1.0], device = device)
 
-        Y = odeint(self.ode_f, y0, time, options = {'dtype': torch.float32}).to(device)
+        # Concatenate initial state and code if code is required
+        if code is not None:
+            y0_with_code = torch.cat([y0, code], dim = -1)
+        else:
+            y0_with_code = y0
+
+        Y = odeint(self.ode_f, y0_with_code, time, options = {'dtype': torch.float32}).to(device)
         # Get the final shape at time t = 1
-        X = Y[-1, :, 0, :]
+        X = Y[-1, :, :self.geometry_dim]
 
         return X
 
 
-    def visualize(self, T: torch.Tensor = None, num_pts: int = 1000, ax = None):
+    def visualize(
+        self,
+        T: torch.Tensor = None,
+        num_pts: int = 1000,
+        code: torch.Tensor = None,
+        ax = None,
+    ):
         r"""Plot geometry represented by the NeuralODE object.
 
         Args:
@@ -155,13 +177,20 @@ class ODEFunc(nn.Module):
             t: Scalar time at which to compute the time rate of change of state.
             y: State tensor. Shape :math:`(..., d)`, where :math:`d` is the geometry dimension.
         """
+        # Extract the state and the code from their concatenation
+        geometry_dim = self.geometry_dim
+        y, code = y[..., :geometry_dim], y[..., geometry_dim:]
+
         # Broadcast t to appropriate shape to concatenate with y
         t = torch.broadcast_to(t.to(y), y[..., :1].shape)
 
         # Concatenate y and t to feed as input to our ode function
-        state_with_time = torch.cat([y, t], dim = -1)
+        state_with_time = torch.cat([y, t, code], dim = -1)
 
         # Compute the rate of change of y using the neural network defining the ODE function
         dy = self.ode_net(state_with_time)
 
-        return dy
+        # Set rate of codes to 0 to preserve their values
+        dcode = torch.zeros_like(code)
+
+        return torch.cat([dy, dcode], dim = -1)

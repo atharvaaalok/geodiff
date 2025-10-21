@@ -29,7 +29,8 @@ class NeuralODE(nn.Module):
     def __init__(
         self,
         geometry_dim: int,
-        ode_net: nn.Module
+        ode_net: nn.Module,
+        preaux_net: nn.Module,
     ) -> None:
         r"""Initialize the NeuralODE object.
 
@@ -44,11 +45,8 @@ class NeuralODE(nn.Module):
         self.register_buffer('geometry_dim', torch.tensor(geometry_dim, dtype = torch.int64))
 
 
-        # Close the input domain edges to map to the same r, e.g. theta = 0, 2pi in 2D
-        if geometry_dim == 2:
-            self.closed_transform = closed_transform_2d
-        elif geometry_dim == 3:
-            self.closed_transform = closed_transform_3d
+        # Use a Pre-Aux Net to create baseline closed manifold
+        self.preaux_net = copy.deepcopy(preaux_net)
 
 
         # Create an object of ODEFunc class to use with NeuralODE forward pass using the provided
@@ -78,15 +76,15 @@ class NeuralODE(nn.Module):
         if T is None:
             T = sample_T(geometry_dim = self.geometry_dim, num_pts = num_pts, device = device)
         
-        if self.ode_f.ode_net.input_dim != 0:
+        if self.ode_f.ode_net.input_dim != (self.geometry_dim + 1):
             # If a single code is provided create copies of it to match the number of T values
             code = code.to(device)
             if T.shape[0] != code.shape[0]:
                 code = code.expand(T.shape[0], -1)
             # Otherwise we assume that for each T the right latent vector has been put in code
 
-        # Apply the closed transformation
-        closed_manifold = self.closed_transform(T)
+        # First create a closed transform using the PreAux net
+        closed_manifold = self.preaux_net(T)
 
         # Use closed manifold as initial condition - (N, d)
         y0 = closed_manifold

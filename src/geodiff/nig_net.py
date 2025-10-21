@@ -7,6 +7,8 @@ import torch
 from torch import nn
 import torch.nn.functional as F
 
+from geodiff.utils import sample_T
+
 
 class NIGnet(nn.Module):
     r"""Neural Injective Geometry network (NIGnet) architecture as described in [1]_.
@@ -100,16 +102,9 @@ class NIGnet(nn.Module):
             torch.Tensor: Matrix of coordinates of points on the geometry. Shape :math:`(N, d)`,
                 where :math:`d` is the dimension of the geometry.
         """
-        if T is None:
-            if self.geometry_dim == 2:
-                T = torch.linspace(0, 1, num_pts).reshape(-1, 1)
-            elif self.geometry_dim == 3:
-                t, s = torch.meshgrid(torch.linspace(0, 1, num_pts), torch.linspace(0, 1, num_pts),
-                                      indexing = 'ij')
-                T = torch.stack([t, s], dim = -1).reshape(-1, 2)
-        # Put T on the same device as the model
         device = next(self.parameters()).device
-        T.to(device = device)
+        if T is None:
+            T = sample_T(geometry_dim = self.geometry_dim, num_pts = num_pts, device = device)
 
         if self.preaux_net.latent_dim != 0:
             # If a single code is provided create copies of it to match the number of T values

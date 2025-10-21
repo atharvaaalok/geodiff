@@ -7,6 +7,7 @@ from torch import nn
 from torchdiffeq import odeint_adjoint as odeint
 
 from geodiff.transforms import closed_transform_2d, closed_transform_3d
+from geodiff.utils import sample_T
 
 
 class NeuralODE(nn.Module):
@@ -68,16 +69,9 @@ class NeuralODE(nn.Module):
             torch.Tensor: Matrix of coordinates of points on the geometry. Shape :math:`(N, d)`,
                 where :math:`d` is the dimension of the geometry.
         """
-        if T is None:
-            if self.geometry_dim == 2:
-                T = torch.linspace(0, 1, num_pts).reshape(-1, 1)
-            elif self.geometry_dim == 3:
-                t, s = torch.meshgrid(torch.linspace(0, 1, num_pts), torch.linspace(0, 1, num_pts),
-                                      indexing = 'ij')
-                T = torch.stack([t, s], dim = -1).reshape(-1, 2)
-        # Put T on the same device as the model
         device = next(self.parameters()).device
-        T.to(device = device)
+        if T is None:
+            T = sample_T(geometry_dim = self.geometry_dim, num_pts = num_pts, device = device)
 
         # Apply the closed transformation
         closed_manifold = self.closed_transform(T)

@@ -1,3 +1,9 @@
+## 0.9.1
+Add sampling plan and modify closed transform for uniform samples on closed manifold.
+- Add Farthest Point Sampling for Blue-noise like sampling in the T domain.
+- Modify closed transform 3D to create uniform density samples on the sphere.
+
+
 ## 0.9.0
 Add latent code functionality to represent geometry.
 - Add latent code functionality to Pre-Aux nets.

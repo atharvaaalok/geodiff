@@ -1,3 +1,7 @@
+## 0.9.4
+Add functionality to specify solver and tolerances for NeuralODE.
+
+
 ## 0.9.3
 Add Pre-Aux net functionality to NeuralODE.
 - Fix Pre-Aux net forward path to work with no latent dim networks.

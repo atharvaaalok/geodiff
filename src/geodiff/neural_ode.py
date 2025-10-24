@@ -31,6 +31,9 @@ class NeuralODE(nn.Module):
         geometry_dim: int,
         ode_net: nn.Module,
         preaux_net: nn.Module,
+        solver: str = 'dopri5',
+        rtol: float = 1e-7,
+        atol: float = 1e-9,
     ) -> None:
         r"""Initialize the NeuralODE object.
 
@@ -40,6 +43,11 @@ class NeuralODE(nn.Module):
                 equation.
         """
         super().__init__()
+
+        # Save ode solver properties
+        self.solver = solver
+        self.rtol = rtol
+        self.atol = atol
 
         # Save attributes in buffer so that they can be saved with state_dict
         self.register_buffer('geometry_dim', torch.tensor(geometry_dim, dtype = torch.int64))
@@ -98,7 +106,9 @@ class NeuralODE(nn.Module):
         else:
             y0_with_code = y0
 
-        Y = odeint(self.ode_f, y0_with_code, time, options = {'dtype': torch.float32}).to(device)
+        Y = odeint(self.ode_f, y0_with_code, time, method = self.solver,
+                   rtol = self.rtol, atol = self.atol,
+                   options = {'dtype': torch.float32}).to(device)
         # Get the final shape at time t = 1
         X = Y[-1, :, :self.geometry_dim]
 

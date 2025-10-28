@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import torch
 from torch import nn
-from torchdiffeq import odeint_adjoint as odeint
+from torchdiffeq import odeint_adjoint, odeint
 
 from geodiff.transforms import closed_transform_2d, closed_transform_3d
 from geodiff.utils import sample_T
@@ -34,6 +34,7 @@ class NeuralODE(nn.Module):
         solver: str = 'dopri5',
         rtol: float = 1e-7,
         atol: float = 1e-9,
+        integrator: str = 'odeint_adjoint',
     ) -> None:
         r"""Initialize the NeuralODE object.
 
@@ -48,6 +49,7 @@ class NeuralODE(nn.Module):
         self.solver = solver
         self.rtol = rtol
         self.atol = atol
+        self.integrator = integrator
 
         # Save attributes in buffer so that they can be saved with state_dict
         self.register_buffer('geometry_dim', torch.tensor(geometry_dim, dtype = torch.int64))
@@ -106,7 +108,14 @@ class NeuralODE(nn.Module):
         else:
             y0_with_code = y0
 
-        Y = odeint(self.ode_f, y0_with_code, time, method = self.solver,
+        if self.integrator == 'odeint':
+            integrator_func = odeint
+        elif self.integrator == 'odeint_adjoint':
+            integrator_func = odeint_adjoint
+        else:
+            raise ValueError('Only allowed integrators are odeint and odeint_adjoint.')
+        
+        Y = integrator_func(self.ode_f, y0_with_code, time, method = self.solver,
                    rtol = self.rtol, atol = self.atol,
                    options = {'dtype': torch.float32}).to(device)
         # Get the final shape at time t = 1

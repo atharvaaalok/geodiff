@@ -1,3 +1,7 @@
+## 0.9.5
+Add functionality to specify integrator function for NeuralODE.
+
+
 ## 0.9.4
 Add functionality to specify solver and tolerances for NeuralODE.
 
